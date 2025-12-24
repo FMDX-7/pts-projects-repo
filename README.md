@@ -1,6 +1,6 @@
 # pts-projects-repo
 
-A lightweight scaffold for the PTS interview projects. This repo collects the demos and walkthroughs used for interview prep and contains starter files for the monitoring and ops projects.
+A lightweight scaffold for PTS styled projects. This repo collects the demos and walkthroughs used for interview prep and contains starter files for the monitoring and ops projects.
 
 Included (scaffold):
 
