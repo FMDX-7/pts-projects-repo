@@ -32,5 +32,12 @@ services:
       - "9100:9100"
     restart: unless-stopped
 
+  python-exporter:
+    build: ./exporter
+    container_name: python-exporter
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
 volumes:
   grafana-data: {}
