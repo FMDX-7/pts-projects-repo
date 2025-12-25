@@ -13,8 +13,13 @@ Run / Demo
 1. Start the compose stack:
 
 ```powershell
-cd "C:/Users/FM's Laptop/Downloads/pts-projects-repo/projects/project-1-monitoring"
+# from the repo root (cross-platform):
+cd projects/project-1-monitoring
 docker compose up -d
+
+# OR use an absolute path on your machine (replace with your path):
+# cd "C:/path/to/pts-projects-repo/projects/project-1-monitoring"
+# docker compose up -d
 ```
 
 2. Open Grafana at `http://localhost:3000` and Prometheus at `http://localhost:9090`.
@@ -23,5 +28,4 @@ Screenshots
 
 ![Grafana - Simple Monitoring](grafana-screenshot.png)
 
-(If the image does not appear, save a screenshot named `grafana-screenshot.png` into this folder.)
 
