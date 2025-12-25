@@ -1,0 +1,18 @@
+{
+  "annotations": {"list":[]},
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Node Exporter: up",
+      "targets": [
+        {"expr": "up{job=\"node-exporter\"}", "refId": "A"}
+      ],
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+      "id": 1
+    }
+  ],
+  "title": "Simple Monitoring",
+  "uid": "simple-monitoring-1",
+  "schemaVersion": 30,
+  "version": 1
+}
