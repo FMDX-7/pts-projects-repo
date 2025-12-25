@@ -19,10 +19,3 @@ docker compose up -d
 
 2. Open Grafana at `http://localhost:3000` and Prometheus at `http://localhost:9090`.
 
-What to include
-
-- `docker-compose.yml`
-- `prometheus.yml` (scrape config)
-- Example Grafana dashboard JSON
-- Small Python exporter script (optional)
-- README with screenshots and run steps
