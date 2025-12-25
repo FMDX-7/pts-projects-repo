@@ -16,6 +16,8 @@ Projects (short summaries)
 - `projects/project-4-job-scheduler`: Tkinter GUI job scheduler. Add, edit, run jobs and view per-job logs in `projects/project-4-job-scheduler/logs/`.
 - `projects/project-5-order-routing`: Minimal Flask in-memory order router and `sample_client.py` to post orders. Start the server and use the client to demonstrate request/response and in-memory state.
 - `projects/project-6-backtest-logs`: Backtest log examples and analyzers. Includes a JSONL and CSV sample, `backtest_parser.py`, and a `analyze_pandas.py` script that produces simple PNG charts in `plots/`.
+ - `projects/project-6-backtest-logs`: Backtest log examples and analyzers. Includes a JSONL and CSV sample, `backtest_parser.py`, and a `analyze_pandas.py` script that produces simple PNG charts in `plots/`.
+ - `projects/project-7-prop-trading-ops`: Operational demo for prop trading services (order routing, healthchecks, incident logging, and a small ops dashboard). This project intentionally mirrors everyday responsibilities for an Application Support / Production Services role: monitoring, triage, synthetic testing, incident capture, and basic automation.
 
 Quick start (general)
 
@@ -80,6 +82,24 @@ Next steps and ideas
 - Add a broker-backed order-routing demo (RabbitMQ/Redis Streams) for project-5.
 - Add interactive Plotly dashboards or a small Jupyter notebook for deeper backtest analysis in project-6.
 - Add automated Grafana provisioning for project-3 to pre-load datasources/dashboards.
+
+Project-7 notes (Prop Trading Ops)
+
+- Purpose: demonstrate an on-call / application-support workflow for trading systems: order acceptance & routing, healthchecks, monitor polling, and incident capture.
+- Runbook: see [projects/project-7-prop-trading-ops/runbook.md](projects/project-7-prop-trading-ops/runbook.md) for triage steps, escalation templates, and quick remediation commands.
+- Quick links:
+	- Service: [projects/project-7-prop-trading-ops/healthcheck_app.py](projects/project-7-prop-trading-ops/healthcheck_app.py)
+	- Run helper: [projects/project-7-prop-trading-ops/run_simulator.py](projects/project-7-prop-trading-ops/run_simulator.py)
+	- Monitor poller: [projects/project-7-prop-trading-ops/monitor_poll.py](projects/project-7-prop-trading-ops/monitor_poll.py)
+	- Incident log: [projects/project-7-prop-trading-ops/incidents.jsonl](projects/project-7-prop-trading-ops/incidents.jsonl)
+	- Dashboard (live): http://127.0.0.1:8080/dashboard (after starting the service)
+
+Why this maps to the role you pasted
+
+- Daily support & triage: the runbook + monitor simulate typical first-responder steps (health checks, synthetic orders, log capture).
+- Windows/Linux and scripting: projects include PowerShell examples and Python scripts for automation and polling.
+- Coordination and escalation: `runbook.md` contains communication templates and escalation guidance.
+
 
 License & safety
 
