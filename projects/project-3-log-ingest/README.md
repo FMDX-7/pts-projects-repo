@@ -43,3 +43,42 @@ Files added
 Notes
 
 - This is a minimal local demo for interview purposes. For production use secure Grafana, enable auth, and configure retention/storage for Loki.
+
+Troubleshooting: Grafana to Loki datasource
+
+- Important: when Grafana is running inside the same Docker Compose network (the default in this demo), the datasource URL in Grafana must be the service hostname and port that Grafana can reach inside the Compose network: `http://loki:3100`.
+	- If you set the URL to `http://localhost:3100` in Grafana's UI, Grafana will try to connect to *its own* container's localhost, not your host machine — that will fail in this Compose setup.
+	- If you are running Grafana on your host (not in Docker), then use `http://localhost:3100`.
+
+- Quick checks if "Unable to connect with Loki" appears:
+	1. From your host, confirm Loki is listening on the published port:
+
+```powershell
+# host (PowerShell)
+curl http://localhost:3100/ready
+```
+
+	2. From inside the Grafana container (to test container networking):
+
+```powershell
+# run on host
+docker compose exec grafana pwsh -c "curl -svS http://loki:3100/ready"
+```
+
+	3. Check container logs for errors:
+
+```powershell
+docker compose logs --tail 200 loki
+docker compose logs --tail 200 promtail
+docker compose logs --tail 200 grafana
+```
+
+	4. If Promtail shows DNS failures (errors like "no such host" for `loki`) or Loki failed to start, restart the stack and re-check logs:
+
+```powershell
+docker compose down
+docker compose up -d --build
+```
+
+- Auto-provisioning Grafana datasource (optional):
+	- To avoid manual steps you can add a provisioning file under `grafana/provisioning/datasources/loki.yml` that points Grafana to `http://loki:3100` and the container will create the datasource automatically on startup. I can add this file for you if you want.
