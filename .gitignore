@@ -7,6 +7,9 @@ venv/
 # Logs
 *.log
 
+# Ignore local scheduler jobs file (contains user-specific paths)
+projects/project-4-job-scheduler/jobs.json
+
 # OS
 Thumbs.db
 .DS_Store
