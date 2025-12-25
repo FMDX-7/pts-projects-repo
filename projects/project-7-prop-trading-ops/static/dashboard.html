@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Ops Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>body{font-family:Arial;margin:18px} .tile{display:inline-block;margin:8px;padding:10px;border:1px solid #eee;border-radius:6px}</style>
+</head>
+<body>
+  <h2>Prop Trading Ops — Mini Dashboard</h2>
+  <div class="tile" id="health">Health: <span id="health-val">?</span></div>
+  <div class="tile" id="metrics">Orders: <span id="orders-count">?</span></div>
+
+  <h3>Orders by Symbol</h3>
+  <canvas id="ordersChart" width="600" height="200"></canvas>
+
+  <h3>Incidents Timeline (count by type)</h3>
+  <canvas id="incidentsChart" width="600" height="200"></canvas>
+
+  <script>
+    async function fetchJson(path){const r=await fetch(path); return r.ok?await r.json():null}
+
+    async function update(){
+      const health = await fetchJson('/health');
+      document.getElementById('health-val').innerText = health?health.status:'error';
+      const metrics = await fetchJson('/metrics');
+      document.getElementById('orders-count').innerText = metrics?metrics.orders_count:'?';
+
+      const orders = await fetchJson('/orders') || [];
+      const bySym = {};
+      orders.forEach(o=> bySym[o.symbol] = (bySym[o.symbol]||0)+1);
+      renderOrdersChart(bySym);
+
+      const incidents = await fetchJson('/incidents') || [];
+      const byType = {};
+      incidents.forEach(i=> byType[i.type] = (byType[i.type]||0)+1);
+      renderIncidentsChart(byType);
+    }
+
+    let ordersChart, incidentsChart;
+    function renderOrdersChart(data){
+      const labels = Object.keys(data);
+      const vals = labels.map(k=>data[k]);
+      const ctx = document.getElementById('ordersChart').getContext('2d');
+      if(ordersChart) ordersChart.destroy();
+      ordersChart = new Chart(ctx, {type:'bar', data:{labels, datasets:[{label:'Orders',data:vals,backgroundColor:'rgba(54,162,235,0.6)'}]}});
+    }
+
+    function renderIncidentsChart(data){
+      const labels = Object.keys(data);
+      const vals = labels.map(k=>data[k]);
+      const ctx = document.getElementById('incidentsChart').getContext('2d');
+      if(incidentsChart) incidentsChart.destroy();
+      incidentsChart = new Chart(ctx, {type:'bar', data:{labels, datasets:[{label:'Incidents',data:vals,backgroundColor:'rgba(255,99,132,0.6)'}]}});
+    }
+
+    update();
+    setInterval(update, 5000);
+  </script>
+</body>
+</html>
