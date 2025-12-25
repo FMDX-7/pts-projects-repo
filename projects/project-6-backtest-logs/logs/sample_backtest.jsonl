@@ -1,0 +1,4 @@
+{"timestamp":"2025-12-25T02:00:00Z","symbol":"ABC","side":"BUY","qty":100,"price":10.5,"pnl":50.0}
+{"timestamp":"2025-12-25T02:01:00Z","symbol":"ABC","side":"SELL","qty":100,"price":10.8,"pnl":30.0}
+{"timestamp":"2025-12-25T02:05:00Z","symbol":"XYZ","side":"BUY","qty":50,"price":25.0,"pnl":-15.0}
+{"timestamp":"2025-12-25T02:10:00Z","symbol":"ABC","side":"BUY","qty":200,"price":10.2,"pnl":120.0}
