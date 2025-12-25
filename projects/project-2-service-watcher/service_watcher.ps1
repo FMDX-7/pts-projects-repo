@@ -59,7 +59,8 @@ while ($true) {
             if (-not $proc) {
                 # No process matched by executable name — try matching process command line (useful for scripts run by python)
                 try {
-                    $procInfo = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine -match [regex]::Escape($ProcessName) } | Select-Object -First 1
+                    $lowerName = $ProcessName.ToLower()
+                    $procInfo = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine.ToLower().Contains($lowerName) } | Select-Object -First 1
                     if ($procInfo) {
                         $proc = Get-Process -Id $procInfo.ProcessId -ErrorAction SilentlyContinue
                     }
@@ -70,13 +71,35 @@ while ($true) {
                 if (-not $proc) {
                     Write-Log "Process '$ProcessName' not running."
                     if ($StartCommand) {
-                    Write-Log "Starting process with command: $StartCommand"
-                    try {
-                        Start-Process -FilePath "cmd.exe" -ArgumentList "/c", $StartCommand -WindowStyle Hidden -ErrorAction Stop
-                        Write-Log "Started process via command"
-                    } catch {
-                        Write-Log "Failed to start process: $_"
-                    }
+                        Write-Log "Starting process with command: $StartCommand"
+                        try {
+                            # Parse StartCommand into executable and arguments so we can start the executable directly
+                            $exe = $null; $args = $null
+                            if ($StartCommand -match '^\s*"([^"]+)"\s*(.*)$') { $exe = $matches[1]; $args = $matches[2].Trim() }
+                            elseif ($StartCommand -match '^\s*([^\s]+)\s*(.*)$') { $exe = $matches[1]; $args = $matches[2].Trim() }
+
+                            if (-not $exe) { throw 'Unable to parse StartCommand' }
+
+                            # Prefer starting the executable directly (avoid cmd.exe wrapper)
+                            if ($args) {
+                                $argList = $args -split ' ' | Where-Object { $_ -ne '' }
+                                Start-Process -FilePath $exe -ArgumentList $argList -WorkingDirectory (Get-Location) -WindowStyle Hidden -ErrorAction Stop
+                            } else {
+                                Start-Process -FilePath $exe -WorkingDirectory (Get-Location) -WindowStyle Hidden -ErrorAction Stop
+                            }
+
+                            # Give process a small grace period and verify it started by re-checking command line
+                            Start-Sleep -Seconds 2
+                            $procInfo2 = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine.ToLower().Contains($lowerName) } | Select-Object -First 1
+                            if ($procInfo2) {
+                                Write-Log "Started process via command (PID $($procInfo2.ProcessId))"
+                                $proc = Get-Process -Id $procInfo2.ProcessId -ErrorAction SilentlyContinue
+                            } else {
+                                Write-Log "Started process but could not verify via command line match"
+                            }
+                        } catch {
+                            Write-Log "Failed to start process: $_"
+                        }
                     } else {
                         Write-Log "No -StartCommand provided; cannot start process"
                     }
