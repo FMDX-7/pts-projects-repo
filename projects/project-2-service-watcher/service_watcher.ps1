@@ -55,9 +55,11 @@ while ($true) {
             }
         } else {
             if (-not $ProcessName) { Write-Log "Error: -ProcessName is required for process mode"; break }
+            # Try to find the process by executable name first
             $proc = Get-Process -Name $ProcessName -ErrorAction SilentlyContinue
+
+            # If not found by name, try matching the command line (useful for scripts run by python)
             if (-not $proc) {
-                # No process matched by executable name — try matching process command line (useful for scripts run by python)
                 try {
                     $procInfo = Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -and $_.CommandLine -match [regex]::Escape($ProcessName) } | Select-Object -First 1
                     if ($procInfo) {
@@ -66,9 +68,10 @@ while ($true) {
                 } catch {
                     # ignore CIM errors and proceed
                 }
+            }
 
-                if (-not $proc) {
-                    Write-Log "Process '$ProcessName' not running."
+            if (-not $proc) {
+                Write-Log "Process '$ProcessName' not running."
                 if ($StartCommand) {
                     Write-Log "Starting process with command: $StartCommand"
                     try {
