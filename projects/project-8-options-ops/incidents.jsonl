@@ -20,3 +20,4 @@
 {"type": "feed_stale", "age_sec": null, "timestamp": 1766719228.4808798}
 {"type": "feed_stale", "age_sec": null, "timestamp": 1766719228.4818373}
 {"type": "health_check_error", "error": "HTTPConnectionPool(host='127.0.0.1', port=8081): Read timed out. (read timeout=3)", "timestamp": 1766720043.4069037}
+{"type": "feed_stale", "age_sec": null, "timestamp": 1766720658.7123795}
