@@ -107,4 +107,9 @@ License & safety
 
 - No production credentials or secrets are included. Use caution if adapting configs for real environments.
 
+Changelog
+
+- 2025-12-25: checkpoint commit and minor README update (added changelog entry).
+
+
 
