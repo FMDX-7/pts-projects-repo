@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Futures Ops Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>body{font-family:Arial;margin:18px} .tile{display:inline-block;margin:8px;padding:10px;border:1px solid #eee;border-radius:6px}</style>
+</head>
+<body>
+  <h2>Futures Ops — Mini Dashboard</h2>
+  <div class="tile">Health: <span id="health-val">?</span></div>
+  <div class="tile">Orders: <span id="orders-count">?</span></div>
+  <div class="tile">Feed: <span id="feed-val">?</span></div>
+
+  <h3>Orders by Symbol</h3>
+  <canvas id="ordersChart" width="700" height="220"></canvas>
+
+  <h3>Incidents by Type</h3>
+  <canvas id="incidentsChart" width="700" height="220"></canvas>
+
+  <script>
+    async function j(u){const r=await fetch(u);return r.ok?await r.json():null}
+    let oc, ic;
+    function render(id,data,label,color){
+      const labels = Object.keys(data);
+      const vals = labels.map(k=>data[k]);
+      const ctx = document.getElementById(id).getContext('2d');
+      const ch = id==='ordersChart'?oc:ic;
+      if(ch) ch.destroy();
+      const n = new Chart(ctx,{type:'bar',data:{labels,datasets:[{label:label,data:vals,backgroundColor:color}]}});
+      if(id==='ordersChart') oc=n; else ic=n;
+    }
+    async function update(){
+      const health = await j('/health');
+      document.getElementById('health-val').innerText = health?health.status:'?';
+      const feed = await j('/quotes/status');
+      document.getElementById('feed-val').innerText = feed?feed.status:'?';
+      const metrics = await j('/metrics');
+      document.getElementById('orders-count').innerText = metrics?metrics.orders_count:'?';
+      const orders = await j('/orders') || [];
+      const bySym = {};
+      orders.forEach(o=>{const s=o.symbol||'UNK'; bySym[s]=(bySym[s]||0)+1;});
+      render('ordersChart', bySym, 'Orders', 'rgba(54,162,235,0.6)');
+      const incidents = await j('/incidents') || [];
+      const byType = {};
+      incidents.forEach(i=>{byType[i.type]=(byType[i.type]||0)+1;});
+      render('incidentsChart', byType, 'Incidents', 'rgba(255,99,132,0.6)');
+    }
+    update();
+    setInterval(update, 5000);
+  </script>
+</body>
+</html>

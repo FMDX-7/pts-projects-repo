@@ -17,7 +17,9 @@ Projects (short summaries)
 - `projects/project-5-order-routing`: Minimal Flask in-memory order router and `sample_client.py` to post orders. Start the server and use the client to demonstrate request/response and in-memory state.
 - `projects/project-6-backtest-logs`: Backtest log examples and analyzers. Includes a JSONL and CSV sample, `backtest_parser.py`, and a `analyze_pandas.py` script that produces simple PNG charts in `plots/`.
  - `projects/project-6-backtest-logs`: Backtest log examples and analyzers. Includes a JSONL and CSV sample, `backtest_parser.py`, and a `analyze_pandas.py` script that produces simple PNG charts in `plots/`.
- - `projects/project-7-prop-trading-ops`: Operational demo for prop trading services (order routing, healthchecks, incident logging, and a small ops dashboard). This project intentionally mirrors everyday responsibilities for an Application Support / Production Services role: monitoring, triage, synthetic testing, incident capture, and basic automation.
+- `projects/project-7-prop-trading-ops`: Operational demo for prop trading services (order routing, healthchecks, incident logging, and a small ops dashboard). This project intentionally mirrors everyday responsibilities for an Application Support / Production Services role: monitoring, triage, synthetic testing, incident capture, and basic automation.
+- `projects/project-8-options-ops`: Options routing/support simulator: options single/multi-leg orders, feed heartbeat, incidents, monitor, dashboard, runbook.
+- `projects/project-9-futures-ops`: Futures (ES/NQ) routing/support simulator with feed heartbeat, incidents, monitor, dashboard, runbook.
 
 Quick start (general)
 
