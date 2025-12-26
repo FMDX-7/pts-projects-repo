@@ -1,0 +1,17 @@
+@startuml
+title Service Watcher Use Case
+:Operator: as O
+:Service Watcher: as W
+
+actor Operator
+usecase "Start watcher" as UC1
+usecase "Detect crash" as UC2
+usecase "Restart service" as UC3
+usecase "Notify operator" as UC4
+
+O --> UC1
+W --> UC2
+UC2 --> UC3
+UC2 --> UC4
+
+@enduml

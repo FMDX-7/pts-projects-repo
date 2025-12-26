@@ -1,0 +1,17 @@
+@startuml
+title Healthcheck Monitor Sequence
+actor Operator
+participant Monitor
+participant Service
+participant IncidentLog
+
+Operator -> Monitor: start monitoring
+Monitor -> Service: GET /health
+alt healthy
+    Service --> Monitor: 200 OK
+else unhealthy
+    Service --> Monitor: 500 / timeout
+    Monitor -> IncidentLog: POST incident
+    Monitor -> Operator: alert (console/email)
+end
+@enduml
